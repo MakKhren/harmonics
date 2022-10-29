@@ -16,10 +16,15 @@ class  TNDI():
         I_oper_full - полный действующий ток
         n_harm   - количество гармоник
         '''
-
-        self.n_harm = n_harm     
+        if n_harm <= 0:
+            self.n_harm = 1 
+        else:
+            self.n_harm = n_harm 
         self.I_oper_conv = I_oper_conv  
-        self.I_oper_full = I_oper_full 
+        if I_oper_full <= 0:
+            self.I_oper_full = 1 
+        else:
+            self.I_oper_full = I_oper_full
         self.__I_amp_harmonics = []
         self.__lower_limit = np.pi / 6
         self.__upper_limit = 5 * np.pi / 6
@@ -87,9 +92,15 @@ class TNDU():
         U_phas - фазное напряжение
         n_harm   - количество гармоник
         '''
-        self.n_harm = n_harm     
+        if n_harm <= 0:
+            self.n_harm = 1 
+        else:
+            self.n_harm = n_harm 
         self.I_oper_conv = I_oper_conv
-        self.U_phase_oper = U_phase_oper
+        if U_phase_oper <=0:
+            self.U_phase_oper = 230
+        else:
+            self.U_phase_oper = U_phase_oper
         self.r_sys = r_sys
         self.x_sys = x_sys
         self.__z_sys = np.sqrt(r_sys**2 + x_sys**2)
@@ -205,16 +216,4 @@ class TNDU():
 
     def get_tnd_u(self):
         '''Получение коэфициента искажения напряжения'''
-        return self.__tnd_u
-    
-
-
-
-if __name__ == '__main__':
-    x = TNDU(25, 51, 0.00402, 0.0187, 230)
-    y = TNDI(25, 51, 637.42 )
-    print(x.get_U_amp_harmonics())
-   
-    
-   
- 
+        return self.__tnd_u  

@@ -73,7 +73,56 @@ class TestTNDU(unittest.TestCase):
                                 0.0, -0.014, 0.0, -0.055, 0.0, -0.039, 0.0, 
                                 0.006, 0.0, 0.033, 0.0, 0.026, 0.0, -0.003, 
                                 0.0, -0.025, 0.0, -0.021]
+        self.U_rms_harmonisc = 0.155  
+        self.tnd_u = 0.067 
 
+    def test_get_U_amp_harmonics_bn1(self):
+        '''
+        Тест проверяет правильность вывода и корректность
+        расчета внутреннего метода __calculate_U_amp_harmonics_bn1  
+        '''
+        self.assertEqual(self.__U_amp_harmonics_b1n,
+                    self.my_tnd_u.get_U_amp_harmonics_bn1())
+
+    def test_get_U_amp_harmonics_bn2(self):
+        '''
+        Тест проверяет правильность вывода и корректность
+        расчета внутреннего метода __calculate_U_amp_harmonics_bn2  
+        '''
+        self.assertEqual(self.__U_amp_harmonics_b2n,
+                    self.my_tnd_u.get_U_amp_harmonics_bn2())
+
+    def test_get_U_amp_harmonics_bn3(self):
+        '''
+        Тест проверяет правильность вывода и корректность
+        расчета внутреннего метода __calculate_U_amp_harmonics_bn3  
+        '''
+        self.assertEqual(self.__U_amp_harmonics_b3n,
+                    self.my_tnd_u.get_U_amp_harmonics_bn3()) 
+
+
+    def test_get_U_amp_harmonics_bn2(self):
+        '''
+        Тест проверяет правильность вывода и корректность
+        расчета внутреннего метода __calculate_U_amp_harmonics  
+        '''
+        self.assertEqual(self.__U_amp_harmonics,
+                    self.my_tnd_u.get_U_amp_harmonics())                              
+
+    def test_get_U_rms_harmonics(self):
+        '''
+        Тест проверяет правильность вывода и корректность
+        расчета внутреннего метода __calculate_U_rms_harmonics  
+        '''
+        self.assertEqual(self.U_rms_harmonisc,
+                    self.my_tnd_u.get_U_rms_harmonics()) 
+
+    def test_get_tnd_u(self):
+        '''
+        Тест проверяет правильность вывода и корректность
+        расчета внутреннего метода __calculate_tnd_u  
+        '''
+        self.assertEqual(self.tnd_u, self.my_tnd_u.get_tnd_u())
 
 if __name__ == '__main__':
     unittest.main()
