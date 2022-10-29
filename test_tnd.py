@@ -15,9 +15,9 @@ class TestTNDI(unittest.TestCase):
         self.current_amp_harmonics = [56.24, 0.0, 0.0, 0.0, -11.25, 0.0, -8.03, 
                                     -0.0, -0.0, -0.0, 5.11, 0.0, 4.33, -0.0, 
                                     0.0, -0.0, -3.31, -0.0, -2.96, 0.0, -0.0, 
-                                    0.0, 2.45, -0.0]
-        self.I_rms_harm = 11.44
-        self.tnd_i_value = 1.79
+                                    0.0, 2.45, -0.0, 2.25]
+        self.I_rms_harm = 11.55
+        self.tnd_i_value = 1.81
     
     def test__calculate_current_amp_harmonics(self):
         '''
