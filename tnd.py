@@ -20,44 +20,56 @@ class  TNDI():
         self.n_harm = n_harm     
         self.I_oper_conv = I_oper_conv  
         self.I_oper_full = I_oper_full 
-        self.__current_amp_harmonics = []
+        self.__I_amp_harmonics = []
         self.__lower_limit = np.pi / 6
         self.__upper_limit = 5 * np.pi / 6
-        self.__calculate_current_amp_harmonics()
+        self.__calculate_I_amp_harmonics()
+        self.__I_rms_harmonic = self.__calculate_I_rms_harmonic()
+        self.__tnd_i = self.__calculate_tnd_i()
 
     def __get_integrand_bn(self, x, n, I):
         '''подъинтегральная функция для коэфициета bn токовой функции'''
         return I * np.sin(n * x)
 
-    def __calculate_current_amp_harmonics(self):
+    def __calculate_I_amp_harmonics(self):
         '''расчет амплитудных значений токов гармоник с 1 по n гармонику'''
         for n_i in range(1,self.n_harm + 1):
             I_n = 2 / np.pi * quad(self.__get_integrand_bn,
                                     self.__lower_limit,
                                     self.__upper_limit,
                                     args=(n_i,self.I_oper_conv))[0]
-            self.__current_amp_harmonics.append(round(I_n, 2))
+            self.__I_amp_harmonics.append(round(I_n, 2))
         
-
-    def get_current_amp_harmonic(self):
-        '''Получение  аплитудных значений токов гармоник с 1 по n гармонику'''
-        return self.__current_amp_harmonics
-
-    def get_rms_currents_harmonic(self):
+    def __calculate_I_rms_harmonic(self):
         '''
-        Получение среднеквадратичное  значения 
+        Расчет среднеквадратичное  значения 
         действующего тока гармоник со 2 по n гармонику
         '''
         current_oper_harmonics = [(I_na**2)/2 for I_na 
-                                    in self.__current_amp_harmonics[1:]]
+                                    in self.__I_amp_harmonics[1:]]
         I_rms_harm = np.sqrt(sum(current_oper_harmonics))
         return round(I_rms_harm, 2)
 
-    def get_tnd_i(self):
+    def __calculate_tnd_i(self):
         '''Получение коэфициента искажения тока'''
-        I_rms_harm = self.get_rms_currents_harmonic()
+        I_rms_harm = self.__calculate_I_rms_harmonic()
         tnd_i = I_rms_harm / self.I_oper_full * 100
         return round(tnd_i, 2)
+
+    def get_I_amp_harmonics(self):
+        '''Получение  аплитудных значений токов гармоник с 1 по n гармонику'''
+        return self.__I_amp_harmonics
+
+    def get_I_rms_harmonics(self):
+        '''
+        Получение среднеквадратичное  значения 
+        действующего тока гармоник со 2 по n гармонику
+         '''
+        return self.__I_rms_harmonic
+
+    def get_tnd_i(self):
+        '''Получение коэфициента искажения тока'''
+        return self.__tnd_i
 
 
 class TNDU():
@@ -166,6 +178,7 @@ class TNDU():
         return round(U_rms_harmonics, 3)
 
     def __calculate_tnd_u(self):
+        '''Расчет коэфициента искажения напряжения'''
         tnd_u = self.__U_rms_harmonisc / self.U_phase_oper * 100
         return round(tnd_u, 3)
 
@@ -200,9 +213,8 @@ class TNDU():
 if __name__ == '__main__':
     x = TNDU(25, 51, 0.00402, 0.0187, 230)
     y = TNDI(25, 51, 637.42 )
-    print(x.get_U_amp_harmonics_bn1())
-    print(x.get_U_amp_harmonics_bn2())
-    print(x.get_U_amp_harmonics_bn3())
     print(x.get_U_amp_harmonics())
-    print(x.get_U_rms_harmonics())
-    print(x.get_tnd_u())
+   
+    
+   
+ 
