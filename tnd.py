@@ -103,7 +103,7 @@ class TNDU():
             self.U_phase_oper = U_phase_oper
         self.r_sys = r_sys
         self.x_sys = x_sys
-        self.__z_sys = np.sqrt(r_sys**2 + x_sys**2)
+        self.__z_sys = round(np.sqrt(r_sys**2 + x_sys**2), 3)
         self.__U_phase_amp = U_phase_oper * np.sqrt(2)
         self.__U_phase_amp_conv = (self.__U_phase_amp - 
                                     self.I_oper_conv * self.__z_sys)
@@ -216,4 +216,8 @@ class TNDU():
 
     def get_tnd_u(self):
         '''Получение коэфициента искажения напряжения'''
-        return self.__tnd_u  
+        return self.__tnd_u
+
+    def get_z_sys(self):
+        '''Получение полного сопротивления системы'''
+        return self.__z_sys  

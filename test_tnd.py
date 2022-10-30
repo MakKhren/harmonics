@@ -1,7 +1,5 @@
 import unittest
 
-import numpy as np
-
 from tnd import TNDI, TNDU
 
 class TestTNDI(unittest.TestCase):
@@ -18,6 +16,7 @@ class TestTNDI(unittest.TestCase):
                                     0.0, 2.45, -0.0, 2.25]
         self.I_rms_harm = 11.55
         self.tnd_i_value = 1.81
+        self.z_sys = 0.019
     
     def test_get_I_amp_harmonics(self):
         '''
