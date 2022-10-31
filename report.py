@@ -1,52 +1,102 @@
 from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.shared import RGBColor, Pt
 
 from tnd import TNDI, TNDU
 
-my_tnd_i = TNDI(25, 51, 637)
-my_tnd_u = TNDU(25, 51, 0.00402, 0.0187, 230)
+class Report():
+    def __init__(self, my_tnd_i, my_tnd_u):
+        self.my_tnd_i = my_tnd_i
+        self.my_tnd_u = my_tnd_u
+        self.doc = Document()
+        self.__heading_text = [
+            'Анализ гармонических искажений',
+            'Расчет коэффициента искажения синусоидальности тока',
+            'Расчет коэффициента искажения синусоидальности напряжения',
+        ]
+        self.__para_text =[
+            'Таблица 1 Амплитудные значения токов гармоник',
+            'Среднеквадратичное значение тока гармоник',
+            f'Irms = {my_tnd_i.get_I_rms_harmonics()}',
+            'Коэффициент искажения синусоидальности тока',
+            f'TNDi = {my_tnd_i.get_tnd_i()}',
+            'Среднеквадратичное значение напряжения гармоник',
+            f'TNDi = {my_tnd_u.get_tnd_u()}',
+        ]
+        self.__table_cols_text = {
+            'table_1': ['n', 'InA, А'],
+            'table_2': ['n', 'bn1, B', 'bn2, B', 'bn3, B', 'Un, В'],
+        }
+        self.value_I = [self.my_tnd_i.get_I_amp_harmonics(),]
+        self.value_U = [
+            self.my_tnd_u.get_U_amp_harmonics_bn1(),
+            self.my_tnd_u.get_U_amp_harmonics_bn2(),
+            self.my_tnd_u.get_U_amp_harmonics_bn3(),
+            self.my_tnd_u.get_U_amp_harmonics(),
+        ]
 
-doc = Document()
-para_obj_0 = doc.add_heading('Анализ гармонических искажений')
-para_obj_1 = doc.add_paragraph('Расчет коэффициента искажения '
-            'синусоидальности тока')
-para_obj_2 = doc.add_paragraph('Таблица 1 Амплитудные значения токов гармоник')
-table_1 = doc.add_table(rows=1, cols=2)
-table_1.style = 'Table Grid'
-table_1.rows[0].cells[0].text = 'n'
-table_1.rows[0].cells[1].text = 'InA, А'
-for n, I_amp in enumerate(my_tnd_i.get_I_amp_harmonics()):
-    row_cells = table_1.add_row().cells
-    row_cells[0].text = str(n + 1)
-    row_cells[1].text = str(I_amp)
-para_obj_3 = doc.add_paragraph(f'Среднеквадратичное значение тока гармоник')
-para_obj_4 = doc.add_paragraph(f'Irms = {my_tnd_i.get_I_rms_harmonics()}')          
-para_obj_5 = doc.add_paragraph(f'Коэффициент искажения синусоидальности тока')
-para_obj_6 = doc.add_paragraph(f'TNDi = {my_tnd_i.get_tnd_i()}')            
-para_obj_7 = doc.add_paragraph('Расчет коэффициента искажения '
-            'синусоидальности напряжения')
-para_obj_8 = doc.add_paragraph(f'Zпc = {my_tnd_u.get_z_sys()}')
-table_2 = doc.add_table(rows=1, cols=5)
-table_2.rows[0].cells[0].text = 'n'
-table_2.rows[0].cells[1].text = 'bn1'
-table_2.rows[0].cells[2].text = 'bn2'
-table_2.rows[0].cells[3].text = 'bn3'
-table_2.rows[0].cells[4].text = 'UnA'
-for n, U_amp in enumerate(my_tnd_u.get_U_amp_harmonics()):
-    row_cells = table_2.add_row().cells
-    row_cells[0].text = str(n + 1)
-    row_cells[4].text = str(U_amp)
-for n, bn1 in enumerate(my_tnd_u.get_U_amp_harmonics_bn1()):
-    table_2.rows[n+1].cells[1].text = str(bn1)
-for n, bn2 in enumerate(my_tnd_u.get_U_amp_harmonics_bn2()):
-    table_2.rows[n+1].cells[2].text = str(bn2)
-for n, bn3 in enumerate(my_tnd_u.get_U_amp_harmonics_bn3()):
-    table_2.rows[n+1].cells[3].text = str(bn2)
-para_obj_9 = doc.add_paragraph(f'Среднеквадратичное значение напряжения гармоник')
-para_obj_10 = doc.add_paragraph(f'Irms = {my_tnd_u.get_U_rms_harmonics()}')
-para_obj_11 = doc.add_paragraph(f'Коэффициент искажения синусоидальности напряжения')
-para_obj_12 = doc.add_paragraph(f'TNDi = {my_tnd_u.get_tnd_u()}')   
+    def __get_para_obj (self, text, aling='left'):
+        para_obj = self.doc.add_paragraph(text)
+        para_obj.runs[0].font.name = 'Arial'
+        para_obj.runs[0].font.size = Pt(12)
+        para_obj.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x00)
+        if aling == 'center':
+            para_obj.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        elif aling == 'left':
+            para_obj.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
-doc.add_page_break()
-doc.save('report.docx')
+    def __get_heading_obj(self, text,aling='center'):
+        heading_obj =self.doc.add_heading(text)
+        heading_obj.runs[0].font.name = 'Arial'
+        heading_obj.runs[0].font.size = Pt(14)
+        heading_obj.runs[0].font.color.rgb = RGBColor(0x00, 0x00, 0x00)
+        if aling == 'center':
+            heading_obj.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        elif aling == 'left':
+           heading_obj.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
+    def __get_table(self, name_cols, list_values):
+        table = self.doc.add_table(rows=1, cols=len(name_cols))
+        table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        table.style = 'Table Grid'
+        for num_col, name_col in enumerate(name_cols):
+            table.rows[0].cells[num_col].text = name_col
+            cell_para = table.rows[0].cells[num_col].paragraphs[0]
+            cell_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        for n in range(len(list_values[0])):
+            row_cells = table.add_row().cells
+            row_cells[0].text = str(n + 1)
+            row_cells[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        for col, values in enumerate(list_values):
+            for row, value  in enumerate(values):
+                table.rows[row+1].cells[col+1].text = str(value)
+                cell_para = table.rows[row+1].cells[col+1].paragraphs[0] 
+                cell_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    def get_report(self):
+        self.__get_table(self.__table_cols_text['table_1'], self.value_I)
+        self.__get_table(self.__table_cols_text['table_2'], self.value_U)
+        self.doc.add_page_break()
+        self.doc.save('report.docx')         
+            
+if __name__ == '__main__':
+    my_tnd_i = TNDI(25, 51, 637)
+    my_tnd_u = TNDU(25, 51, 0.00402, 0.0187, 230)
+    report = Report(my_tnd_i, my_tnd_u)
+    report.get_report()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
