@@ -23,6 +23,7 @@ my_tnd_u = TNDU(n_harm, I_oper_conv, r_sys, x_sys, U_phase_oper)
 print_consol(my_tnd_i,my_tnd_u)
 my_report = Report(my_tnd_i, my_tnd_u)
 my_report.get_report()
+input("Для завершения нажми Enter")
 
 
 
