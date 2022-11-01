@@ -1,5 +1,5 @@
 import pyinputplus as pyip
-import docx
+from report import Report, print_consol
 
 from tnd import TNDI, TNDU
 
@@ -18,14 +18,11 @@ x_sys = pyip.inputNum(prompt="Введите индуктивное сопрот
 
 my_tnd_i = TNDI(n_harm, I_oper_conv, I_oper_full)
 my_tnd_u = TNDU(n_harm, I_oper_conv, r_sys, x_sys, U_phase_oper)
-file_name = 'report.docx'
 
-print()
-print(f'РЕЗУЛЬТАТЫ РАСЧЕТА'.center(24, '-'))
-print(f"TNDi = {my_tnd_i.get_tnd_i()} "
-    f"TNDu = {my_tnd_u.get_tnd_u()}".center(24, '-'))
-print()
 
+print_consol(my_tnd_i,my_tnd_u)
+my_report = Report(my_tnd_i, my_tnd_u)
+my_report.get_report()
 
 
 
