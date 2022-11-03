@@ -42,11 +42,11 @@ class Report():
             'table_2': ['n', 'bn1, B', 'bn2, B', 'bn3, B', 'Un, В'],
         }
         self.__value_I = [
-            range(len(my_tnd_i.get_I_amp_harmonics())),
+            range(1,len(self.my_tnd_i.get_I_amp_harmonics())+1),
             self.my_tnd_i.get_I_amp_harmonics(),
             ]
         self.__value_U = [
-            range(len(self.my_tnd_u.get_U_amp_harmonics())),
+            range(1,len(self.my_tnd_u.get_U_amp_harmonics())+1),
             self.my_tnd_u.get_U_amp_harmonics_bn1(),
             self.my_tnd_u.get_U_amp_harmonics_bn2(),
             self.my_tnd_u.get_U_amp_harmonics_bn3(),
