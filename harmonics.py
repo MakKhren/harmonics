@@ -2,28 +2,16 @@ import pyinputplus as pyip
 from report import Report, print_consol
 
 from tnd import TNDI, TNDU
+from input_initial_data import InputIinitialData 
 
-n_harm = pyip.inputInt(prompt="Введите количество гармоник: ")
-I_oper_conv = pyip.inputNum(prompt="Введите действующие значение "
-                        "расчетного ток преобразовательной техники: ")
-I_oper_full = pyip.inputNum(
-                        prompt="Введите полный расчетный действующий ток: ",
-                        greaterThan=0
-                        )
-U_phase_oper = int(pyip.inputChoice(["220", "230"],
-                        prompt="Выберите действующие значение фазного "
-                        "напряжения 220 / 230 В: "))
-r_sys = pyip.inputNum(prompt="Введите активное сопротивление системы: ")
-x_sys = pyip.inputNum(prompt="Введите индуктивное сопротивление системы: ")
-
-my_tnd_i = TNDI(n_harm, I_oper_conv, I_oper_full)
-my_tnd_u = TNDU(n_harm, I_oper_conv, r_sys, x_sys, U_phase_oper)
-
+iid = InputIinitialData()
+my_tnd_i = TNDI(iid.n_harm, iid.I_oper_conv, iid.I_oper_full)
+my_tnd_u = TNDU(iid.n_harm, iid.I_oper_conv, iid.r_sys, iid.x_sys,
+                iid.U_phase_oper)
+file_name = 'template.docx'
 
 print_consol(my_tnd_i,my_tnd_u)
-my_report = Report(my_tnd_i, my_tnd_u)
+my_report = Report(my_tnd_i, my_tnd_u, file_name)
 my_report.get_report()
+
 input("Для завершения нажми Enter")
-
-
-

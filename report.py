@@ -5,10 +5,14 @@ from docx.shared import RGBColor, Pt
 
 
 class Report():
-    def __init__(self, my_tnd_i, my_tnd_u):
+    def __init__(self, my_tnd_i, my_tnd_u, name_files):
         self.my_tnd_i = my_tnd_i
         self.my_tnd_u = my_tnd_u
-        self.doc = Document('template.docx')
+        self.name_files = name_files
+        try:
+            self.doc = Document(self.name_files)
+        except:
+            self.doc = Document()
         self.__heading_text = [
             'Исходные данные',
             'Анализ гармонических искажений',
